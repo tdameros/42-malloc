@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-
 #include "malloc.h"
 
+#include <unistd.h>
+
 void *malloc(size_t size) {
-    (void) size;
-    write(2, "ft_malloc called\n", 15);
-    return NULL;
+  (void)size;
+  write(2, "ft_malloc called\n", 15);
+  return NULL;
 }
