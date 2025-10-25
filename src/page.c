@@ -6,6 +6,22 @@
 #include "allocation.h"
 #include "printf.h"
 
+page_t *get_page_with_free_chunk(size_t required_chunk_size, zone_t *zone,
+                                 chunk_t **free_chunk) {
+  page_t *page = zone;
+  while (NULL != page) {
+    chunk_t *chunk = get_chunk_with_size(required_chunk_size, page->free);
+    if (NULL != chunk) {
+      if (NULL != free_chunk) {
+        *free_chunk = chunk;
+      }
+      return page;
+    }
+    page = page->next;
+  }
+  return NULL;
+}
+
 void push_front_page(zone_t **zone_list, page_t *new_page) {
   if (NULL == *zone_list) {
     *zone_list = new_page;
@@ -13,6 +29,18 @@ void push_front_page(zone_t **zone_list, page_t *new_page) {
     (*zone_list)->previous = new_page;
     new_page->next = *zone_list;
     *zone_list = new_page;
+  }
+}
+
+void remove_page(page_t **page, page_t *page_to_remove) {
+  if (*page == page_to_remove) {
+    *page = page_to_remove->next;
+  }
+  if (NULL != page_to_remove->previous) {
+    page_to_remove->previous->next = page_to_remove->next;
+  }
+  if (NULL != page_to_remove->next) {
+    page_to_remove->next->previous = page_to_remove->previous;
   }
 }
 
@@ -33,32 +61,4 @@ page_t *allocate_page(size_t aligned_size) {
   new_page->free = new_chunk;
   new_page->size = total_size;
   return new_page;
-}
-
-page_t *get_page_with_free_chunk(size_t required_chunk_size, zone_t *zone,
-                                 chunk_t **free_chunk) {
-  page_t *page = zone;
-  while (NULL != page) {
-    chunk_t *chunk = get_chunk_with_size(required_chunk_size, page->free);
-    if (NULL != chunk) {
-      if (NULL != free_chunk) {
-        *free_chunk = chunk;
-      }
-      return page;
-    }
-    page = page->next;
-  }
-  return NULL;
-}
-
-void remove_page(page_t **page, page_t *page_to_remove) {
-  if (*page == page_to_remove) {
-    *page = page_to_remove->next;
-  }
-  if (NULL != page_to_remove->previous) {
-    page_to_remove->previous->next = page_to_remove->next;
-  }
-  if (NULL != page_to_remove->next) {
-    page_to_remove->next->previous = page_to_remove->previous;
-  }
 }

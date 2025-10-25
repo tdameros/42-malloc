@@ -42,7 +42,7 @@ static void *allocate_memory_allocation_medium(size_t aligned_size,
     push_front_page(zone, page);
     free_chunk = page->free;
   }
-  remove_free_chunk(page, free_chunk);
+  remove_chunk(&page->free, free_chunk);
   chunk_t *new_free_chunk;
   chunk_t *allocate_chunk =
       allocate_free_chunk(aligned_size, free_chunk, &new_free_chunk);

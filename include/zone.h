@@ -20,9 +20,9 @@ typedef struct chunk_s chunk_t;
 
 typedef page_t zone_t;
 
-zone_t **get_zone(size_t size, allocations_t *memory);
-size_t get_zone_full_size(size_t aligned_size_required);
-zone_type_t get_zone_type(size_t size);
 zone_t **get_zone_from_data(void *data, allocations_t *memory);
-zone_t **get_zone_from_chunk(chunk_t *chunk, allocations_t *memory);
+zone_t **get_zone_from_chunk(const chunk_t *chunk, allocations_t *memory);
+zone_t **get_zone_from_size(size_t size, allocations_t *memory);
+zone_type_t get_zone_type(size_t size);
+size_t get_zone_full_size(size_t aligned_size_required);
 #endif

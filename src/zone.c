@@ -7,11 +7,11 @@ zone_t **get_zone_from_data(void *data, allocations_t *memory) {
   return get_zone_from_chunk(get_chunk_from_data(data), memory);
 }
 
-zone_t **get_zone_from_chunk(chunk_t *chunk, allocations_t *memory) {
-  return get_zone(chunk->header.page->size, memory);
+zone_t **get_zone_from_chunk(const chunk_t *chunk, allocations_t *memory) {
+  return get_zone_from_size(chunk->header.page->size, memory);
 }
 
-zone_t **get_zone(size_t size, allocations_t *memory) {
+zone_t **get_zone_from_size(size_t size, allocations_t *memory) {
   if (size <= TINY_ZONE_SIZE) {
     return &memory->tiny;
   } else if (size <= SMALL_ZONE_SIZE) {
