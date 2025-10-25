@@ -15,7 +15,8 @@
 #include "chunk.h"
 #include "memory.h"
 
-void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone, zone_t **destination_zone) {
+void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone,
+                                zone_t **destination_zone) {
   chunk_t *chunk = get_chunk_from_data(ptr);
   if (chunk->header.size >= size && zone == destination_zone) {
     return ptr;

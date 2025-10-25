@@ -35,8 +35,10 @@ LIST_TEST_SRC	=	\
 					main.c		\
 					malloc.c	\
 					free.c		\
-					printf.c	\
 					realloc.c
+
+LIST_LIB_SRC	=	\
+					printf/printf.c
 
 # ------------ DIRECTORIES ------------ #
 
@@ -53,10 +55,12 @@ DIR_LIB			=	lib/
 OBJ				=	$(patsubst %.c, $(DIR_BUILD)%.o, $(SRC))
 DEP				=	$(patsubst %.c, $(DIR_BUILD)%.d, $(SRC))
 SRC				=	$(addprefix $(DIR_SRC), $(LIST_SRC))
+LIB_SRC			=	$(addprefix $(DIR_LIB), $(LIST_LIB_SRC))
 TEST_SRC		=	$(addprefix $(DIR_TEST), $(LIST_TEST_SRC))
 TEST_MALLOC_SRC	=	$(addprefix $(DIR_TEST_MALLOC), $(LIST_SRC))
-TEST_DEP		=	$(patsubst %.c, $(DIR_BUILD)%.d, $(TEST_SRC) $(TEST_MALLOC_SRC))
-TEST_OBJ		=	$(patsubst %.c, $(DIR_BUILD)%.o, $(TEST_SRC) $(TEST_MALLOC_SRC))
+TEST_DEP		=	$(patsubst %.c, $(DIR_BUILD)%.d, $(TEST_SRC) $(TEST_MALLOC_SRC) $(LIB_SRC))
+TEST_OBJ		=	$(patsubst %.c, $(DIR_BUILD)%.o, $(TEST_SRC) $(TEST_MALLOC_SRC) $(LIB_SRC))
+
 
 # ------------ COMPILATION ------------ #
 

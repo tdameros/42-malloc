@@ -36,21 +36,28 @@ void remove_free_chunk(page_t *page, chunk_t *chunk_to_free) {
 }
 
 void remove_allocate_chunk(page_t *page, chunk_t *chunk_to_free) {
-    if (page->allocation == chunk_to_free) {
-        page->allocation = chunk_to_free->header.next;
-    }
-    if (NULL != chunk_to_free->header.previous) {
-        chunk_to_free->header.previous->header.next = chunk_to_free->header.next;
-    }
-    if (NULL != chunk_to_free->header.next) {
-        chunk_to_free->header.next->header.previous = chunk_to_free->header.previous;
-    }
+  if (page->allocation == chunk_to_free) {
+    page->allocation = chunk_to_free->header.next;
+  }
+  if (NULL != chunk_to_free->header.previous) {
+    chunk_to_free->header.previous->header.next = chunk_to_free->header.next;
+  }
+  if (NULL != chunk_to_free->header.next) {
+    chunk_to_free->header.next->header.previous =
+        chunk_to_free->header.previous;
+  }
 }
 
-chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk, chunk_t **new_free_chunk) {
-  if (free_chunk->header.size - size > align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)) {
-    chunk_t *new_free =(chunk_t*) ((uint8_t *) free_chunk + size + align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT));
-    new_free->header.size = free_chunk->header.size - size - align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT);
+chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk,
+                             chunk_t **new_free_chunk) {
+  if (free_chunk->header.size - size >
+      align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)) {
+    chunk_t *new_free =
+        (chunk_t *)((uint8_t *)free_chunk + size +
+                    align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT));
+    new_free->header.size =
+        free_chunk->header.size - size -
+        align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT);
     new_free->header.page = free_chunk->header.page;
     *new_free_chunk = new_free;
     free_chunk->header.size = size;
@@ -72,5 +79,6 @@ void push_front_chunk(chunk_t **chunk_list, chunk_t *new_chunk) {
 }
 
 chunk_t *get_chunk_from_data(void *data) {
-  return (chunk_t *) align_down_power_of_two((size_t) data - sizeof(chunk_header_t), ALIGNMENT);
+  return (chunk_t *)align_down_power_of_two(
+      (size_t)data - sizeof(chunk_header_t), ALIGNMENT);
 }

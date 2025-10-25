@@ -26,7 +26,8 @@ void free_memory_allocation(void *ptr, zone_t **zone) {
   }
   remove_allocate_chunk(page, chunk);
   push_front_chunk(&page->free, chunk);
-  if (NULL == page->allocation && (NULL != page->previous || NULL != page->next)) {
+  if (NULL == page->allocation &&
+      (NULL != page->previous || NULL != page->next)) {
     remove_page(zone, page);
     munmap(page, page->size);
   }
