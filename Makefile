@@ -22,17 +22,20 @@ TEST_NAME		=	tests_bin
 # --------------- FILES --------------- #
 
 LIST_SRC		=	\
-					chunk.c		\
-					malloc.c	\
-					page.c		\
-					zone.c		\
-					printf.c
+					memory/allocate.c	\
+					memory/free.c		\
+					memory/reallocate.c	\
+					chunk.c				\
+					malloc.c			\
+					page.c				\
+					zone.c
 
 
 LIST_TEST_SRC	=	\
 					main.c		\
 					malloc.c	\
 					free.c		\
+					printf.c	\
 					realloc.c
 
 # ------------ DIRECTORIES ------------ #

@@ -12,7 +12,7 @@ void *ft_free(size_t size);
 #define PAGE_HEADER_SIZE align_up_power_of_two(sizeof(page_t), ALIGNMENT)
 #define CHUNK_HEADER_SIZE align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)
 
-void *get_memory_allocation(size_t size, zone_t **zone);
+void *allocate_memory_allocation(size_t size, zone_t **zone);
 void free_memory_allocation(void *ptr, zone_t **zone);
 void dump_memory(void *ptr, size_t size);
 void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone, zone_t **destination_zone);
@@ -25,7 +25,7 @@ UTEST(realloc_memory_allocation, tiny_simple_downsize) {
     };
     size_t malloc_size = TINY_ZONE_SIZE;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.tiny);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.tiny);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     void *reallocation = realloc_memory_allocation(allocation, aligned_size - 10, &memory.tiny, &memory.tiny);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -41,7 +41,7 @@ UTEST(realloc_memory_allocation, tiny_simple_upsize) {
     };
     size_t malloc_size = TINY_ZONE_SIZE - 3;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.tiny);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.tiny);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     void *reallocation = realloc_memory_allocation(allocation, malloc_size + 3, &memory.tiny, &memory.tiny);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -57,7 +57,8 @@ UTEST(realloc_memory_allocation, tiny_upsize_new_pointer) {
     };
     size_t malloc_size = TINY_ZONE_SIZE;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    uint8_t *allocation = get_memory_allocation(aligned_size, &memory.tiny);
+    uint8_t *allocation =
+        allocate_memory_allocation(aligned_size, &memory.tiny);
     memset(allocation, 0xA, malloc_size);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     uint8_t *reallocation = realloc_memory_allocation(allocation, aligned_size + 10, &memory.tiny, &memory.tiny);
@@ -77,7 +78,8 @@ UTEST(realloc_memory_allocation, tiny_to_small) {
     };
     size_t malloc_size = TINY_ZONE_SIZE;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    uint8_t *allocation = get_memory_allocation(aligned_size, &memory.tiny);
+    uint8_t *allocation =
+        allocate_memory_allocation(aligned_size, &memory.tiny);
     memset(allocation, 0xA, malloc_size);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     uint8_t *reallocation = realloc_memory_allocation(allocation, SMALL_ZONE_SIZE, &memory.tiny, &memory.small);
@@ -98,7 +100,7 @@ UTEST(realloc_memory_allocation, small_simple_downsize) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.small);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.small);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     void *reallocation = realloc_memory_allocation(allocation, aligned_size - 10, &memory.small, &memory.small);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -114,7 +116,7 @@ UTEST(realloc_memory_allocation, small_simple_upsize) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE - 9;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.small);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.small);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     void *reallocation = realloc_memory_allocation(allocation, malloc_size + 9, &memory.small, &memory.small);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -130,7 +132,8 @@ UTEST(realloc_memory_allocation, small_upsize_new_pointer) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    uint8_t *allocation = get_memory_allocation(aligned_size, &memory.small);
+    uint8_t *allocation =
+        allocate_memory_allocation(aligned_size, &memory.small);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     uint8_t *reallocation = realloc_memory_allocation(allocation, malloc_size + 9, &memory.small, &memory.small);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -146,7 +149,7 @@ UTEST(realloc_memory_allocation, large_simple_downsize) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE + 600;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.large);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.large);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     void *reallocation = realloc_memory_allocation(allocation, aligned_size - 10, &memory.small, &memory.small);
     ASSERT_EQ((size_t) reallocation % ALIGNMENT, 0u);
@@ -162,7 +165,8 @@ UTEST(realloc_memory_allocation, large_simple_upsize) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE + 600;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    uint8_t *allocation = get_memory_allocation(aligned_size, &memory.large);
+    uint8_t *allocation =
+        allocate_memory_allocation(aligned_size, &memory.large);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     memset(allocation, 0xA, malloc_size);
     uint8_t *reallocation = realloc_memory_allocation(allocation, malloc_size + 10, &memory.large, &memory.large);
@@ -182,7 +186,8 @@ UTEST(realloc_memory_allocation, large_upsize_new_pointer) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE + 600;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    uint8_t *allocation = get_memory_allocation(aligned_size, &memory.large);
+    uint8_t *allocation =
+        allocate_memory_allocation(aligned_size, &memory.large);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     memset(allocation, 0xA, malloc_size);
     ASSERT_NE(memory.large, NULL);
@@ -203,7 +208,7 @@ UTEST(realloc_memory_allocation, large_downsize_to_small) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE + 600;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.large);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.large);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     memset(allocation, 0xA, malloc_size);
     ASSERT_NE(memory.large, NULL);
@@ -225,7 +230,7 @@ UTEST(realloc_memory_allocation, large_downsize_to_tiny) {
     };
     size_t malloc_size = SMALL_ZONE_SIZE + 600;
     size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
-    void *allocation = get_memory_allocation(aligned_size, &memory.large);
+    void *allocation = allocate_memory_allocation(aligned_size, &memory.large);
     ASSERT_EQ((size_t) allocation % ALIGNMENT, 0u);
     memset(allocation, 0xA, malloc_size);
     ASSERT_NE(memory.large, NULL);

@@ -1,6 +1,7 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 typedef struct page_s page_t;
