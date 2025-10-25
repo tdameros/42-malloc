@@ -1,6 +1,7 @@
 # Project
 libft_malloc*
 tests_bin
+.build
 CMakeLists.txt
 
 # IDE
