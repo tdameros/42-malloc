@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdameros <tdameros@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 16:49:00 by tdameros          #+#    #+#             */
-/*   Updated: 2025/08/07 16:49:00 by tdameros         ###   ########lyon.fr   */
+/*   Created: 2025/10/26 17:34:00 by tdameros          #+#    #+#             */
+/*   Updated: 2025/10/26 17:34:00 by tdameros         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
+#ifndef TEST_H
+#define TEST_H
 
-#include <stddef.h>
+#define PAGE_HEADER_SIZE align_up_power_of_two(sizeof(page_t), ALIGNMENT)
+#define CHUNK_HEADER_SIZE \
+  align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)
 
-#include "allocation.h"
-
-#ifdef TEST_MODE
-# define malloc ft_malloc
-# define free ft_free
-# define realloc ft_realloc
-#endif
-
-allocations_t malloc_memory;
-
-void *malloc(size_t size);
+void ft_free(void *ptr);
+void *ft_malloc(size_t size);
+void *ft_realloc(void *ptr, size_t size);
 
 #endif

@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   memory.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdameros <tdameros@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 16:49:00 by tdameros          #+#    #+#             */
-/*   Updated: 2025/08/07 16:49:00 by tdameros         ###   ########lyon.fr   */
+/*   Created: 2025/10/25 18:51:00 by tdameros          #+#    #+#             */
+/*   Updated: 2025/10/25 18:51:00 by tdameros         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
+#ifndef MEMORY_H
+#define MEMORY_H
 
 #include <stddef.h>
 
-#include "allocation.h"
+#include "zone.h"
 
-#ifdef TEST_MODE
-# define malloc ft_malloc
-# define free ft_free
-# define realloc ft_realloc
-#endif
-
-allocations_t malloc_memory;
-
-void *malloc(size_t size);
+int32_t free_memory_allocation(void *ptr, zone_t **zone);
+void *allocate_memory_allocation(size_t size, zone_t **zone);
+void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone, zone_t **destination_zone);
 
 #endif

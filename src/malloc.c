@@ -12,10 +12,28 @@
 
 #include "malloc.h"
 
-#include <unistd.h>
+#include "allocation.h"
+#include "memory.h"
+
+allocations_t malloc_memory = {
+    .tiny = NULL,
+    .small = NULL,
+    .large = NULL,
+};
 
 void *malloc(size_t size) {
-  (void)size;
-  write(2, "ft_malloc called\n", 15);
-  return NULL;
+  size_t aligned_size = align_up_power_of_two(size, ALIGNMENT);
+  zone_t **zone = get_zone_from_size(aligned_size, &malloc_memory);
+  return allocate_memory_allocation(aligned_size, zone);
+}
+
+void free(void *ptr) {
+  zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
+  free_memory_allocation(ptr, zone);
+}
+
+void *realloc(void *ptr, size_t size) {
+  zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
+  zone_t **destination_zone = get_zone_from_size(size, &malloc_memory);
+  return realloc_memory_allocation(ptr, size, zone, destination_zone);
 }
