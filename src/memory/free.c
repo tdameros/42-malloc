@@ -15,6 +15,9 @@
 #include "zone.h"
 
 int32_t free_memory_allocation(void *ptr, zone_t **zone) {
+  if (NULL == ptr) {
+    return -1;
+  }
   chunk_t *chunk = get_chunk_from_data(ptr);
   page_t *page = chunk->header.page;
   if (get_zone_type(chunk->header.size) == LARGE_ZONE) {

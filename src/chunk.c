@@ -14,6 +14,9 @@ chunk_t *get_chunk_with_size(size_t size, chunk_t *chunk) {
 }
 
 chunk_t *get_chunk_from_data(void *data) {
+  if (NULL == data) {
+    return NULL;
+  }
   return (chunk_t *)align_down_power_of_two(
       (size_t)data - sizeof(chunk_header_t), ALIGNMENT);
 }

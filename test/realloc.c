@@ -1,23 +1,27 @@
 #include <sys/mman.h>
 
-#include "utest/utest.h"
-
-void *ft_free(size_t size);
-
 #include "allocation.h"
+#include "memory.h"
 #include "page.h"
 #include "printf.h"
+#include "test.h"
+#include "utest/utest.h"
 #include "zone.h"
 
-#define PAGE_HEADER_SIZE align_up_power_of_two(sizeof(page_t), ALIGNMENT)
-#define CHUNK_HEADER_SIZE \
-  align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)
-
-void *allocate_memory_allocation(size_t size, zone_t **zone);
-void free_memory_allocation(void *ptr, zone_t **zone);
-void dump_memory(void *ptr, size_t size);
-void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone,
-                                zone_t **destination_zone);
+UTEST(realloc_memory_allocation, null_pointer_allocation) {
+  allocations_t memory = {
+      .tiny = NULL,
+      .small = NULL,
+      .large = NULL,
+  };
+  size_t malloc_size = TINY_ZONE_SIZE;
+  size_t aligned_size = align_up_power_of_two(malloc_size, ALIGNMENT);
+  void *reallocation =
+      realloc_memory_allocation(NULL, aligned_size, &memory.tiny, &memory.tiny);
+  ASSERT_EQ((size_t)reallocation % ALIGNMENT, 0u);
+  ASSERT_NE(reallocation, NULL);
+  ASSERT_EQ(munmap(memory.tiny, memory.tiny->size), 0);
+}
 
 UTEST(realloc_memory_allocation, tiny_simple_downsize) {
   allocations_t memory = {
@@ -251,4 +255,20 @@ UTEST(realloc_memory_allocation, large_downsize_to_tiny) {
     ASSERT_EQ(((uint8_t *)reallocation)[i], 0xA);
   }
   ASSERT_EQ(munmap(memory.tiny, memory.tiny->size), 0);
+}
+
+UTEST(ft_realloc, null_pointer_allocation) {
+  void *reallocation = ft_realloc(NULL, TINY_ZONE_SIZE);
+  ASSERT_EQ((size_t)reallocation % ALIGNMENT, 0u);
+  ASSERT_NE(reallocation, NULL);
+  ft_free(reallocation);
+}
+
+UTEST(ft_realloc, simple_allocation_and_free) {
+  void *allocation = ft_malloc(TINY_ZONE_SIZE);
+  ASSERT_EQ((size_t)allocation % ALIGNMENT, 0u);
+  void *reallocation = ft_realloc(allocation, TINY_ZONE_SIZE + 10);
+  ASSERT_EQ((size_t)reallocation % ALIGNMENT, 0u);
+  ASSERT_NE(reallocation, allocation);
+  ft_free(reallocation);
 }

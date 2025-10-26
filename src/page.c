@@ -45,6 +45,9 @@ void remove_page(page_t **page, page_t *page_to_remove) {
 }
 
 page_t *allocate_page(size_t aligned_size) {
+  if (0 == aligned_size) {
+    return NULL;
+  }
   size_t full_size = get_zone_full_size(aligned_size);
   void *ptr = mmap(NULL, full_size, PROT_READ | PROT_WRITE,
                    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);

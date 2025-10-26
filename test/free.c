@@ -1,21 +1,12 @@
 #include <sys/mman.h>
 
-#include "utest/utest.h"
-
-void *ft_free(size_t size);
-
 #include "allocation.h"
+#include "memory.h"
 #include "page.h"
 #include "printf.h"
+#include "test.h"
+#include "utest/utest.h"
 #include "zone.h"
-
-#define PAGE_HEADER_SIZE align_up_power_of_two(sizeof(page_t), ALIGNMENT)
-#define CHUNK_HEADER_SIZE \
-  align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT)
-
-void *allocate_memory_allocation(size_t size, zone_t **zone);
-void free_memory_allocation(void *ptr, zone_t **zone);
-void dump_memory(void *ptr, size_t size);
 
 UTEST(free_memory_allocation, tiny_simple) {
   size_t malloc_size = TINY_ZONE_SIZE;
@@ -160,4 +151,25 @@ UTEST(free_memory_allocation, medium_multiple_pages) {
   ASSERT_GE(zone->allocation->header.size, aligned_size);
   free_memory_allocation(allocation3, &zone);
   ASSERT_EQ(zone, NULL);
+}
+
+UTEST(ft_free, null_pointer) {
+  ft_free(NULL);
+  ASSERT_EQ(1, 1);
+}
+
+UTEST(ft_free, tiny_allocation) {
+  void *allocation = ft_malloc(TINY_ZONE_SIZE);
+  ASSERT_NE(allocation, NULL);
+  ft_free(allocation);
+}
+UTEST(ft_free, small_allocation) {
+  void *allocation = ft_malloc(SMALL_ZONE_SIZE);
+  ASSERT_NE(allocation, NULL);
+  ft_free(allocation);
+}
+UTEST(ft_free, medium_allocation) {
+  void *allocation = ft_malloc(SMALL_ZONE_SIZE + 500);
+  ASSERT_NE(allocation, NULL);
+  ft_free(allocation);
 }

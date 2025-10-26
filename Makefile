@@ -32,9 +32,9 @@ LIST_SRC		=	\
 
 
 LIST_TEST_SRC	=	\
+					free.c		\
 					main.c		\
 					malloc.c	\
-					free.c		\
 					realloc.c
 
 LIST_LIB_SRC	=	\

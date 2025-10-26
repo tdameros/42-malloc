@@ -8,6 +8,9 @@ zone_t **get_zone_from_data(void *data, allocations_t *memory) {
 }
 
 zone_t **get_zone_from_chunk(const chunk_t *chunk, allocations_t *memory) {
+  if (chunk == NULL) {
+    return NULL;
+  }
   return get_zone_from_size(chunk->header.page->size, memory);
 }
 

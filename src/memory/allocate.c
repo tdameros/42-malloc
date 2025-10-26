@@ -32,6 +32,9 @@ void *allocate_memory_allocation(size_t size, zone_t **zone) {
 
 static void *allocate_memory_allocation_medium(size_t aligned_size,
                                                zone_t **zone) {
+  if (aligned_size == 0) {
+    return NULL;
+  }
   chunk_t *free_chunk;
   page_t *page = get_page_with_free_chunk(aligned_size, *zone, &free_chunk);
   if (NULL == page) {
