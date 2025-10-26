@@ -17,7 +17,7 @@
 
 #include "zone.h"
 
-void free_memory_allocation(void *ptr, zone_t **zone);
+int32_t free_memory_allocation(void *ptr, zone_t **zone);
 void *allocate_memory_allocation(size_t size, zone_t **zone);
 void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone, zone_t **destination_zone);
 

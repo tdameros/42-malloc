@@ -62,3 +62,7 @@ page_t *allocate_page(size_t aligned_size) {
   new_page->size = total_size;
   return new_page;
 }
+
+int32_t free_page(page_t *page) {
+  return munmap(page, page->size);
+}
