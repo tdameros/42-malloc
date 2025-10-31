@@ -23,5 +23,7 @@ chunk_t *get_chunk_from_data(void *data);
 void push_front_chunk(chunk_t **chunk_list, chunk_t *new_chunk);
 void remove_chunk(chunk_t **chunk_list, chunk_t *chunk_to_remove);
 chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk, chunk_t **new_free_chunk);
+chunk_t *find_next_chunk_in_order(chunk_t *chunk_list, const chunk_t *after);
+void print_chunk(const chunk_t *chunk);
 
 #endif

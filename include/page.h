@@ -19,5 +19,7 @@ void push_front_page(zone_t **zone_list, page_t *new_page);
 void remove_page(page_t **page, page_t *page_to_remove);
 page_t *allocate_page(size_t aligned_size);
 int32_t free_page(page_t *page);
+const page_t *find_next_page_in_order(const page_t *page_list, const page_t *after);
+void print_page(const page_t *page);
 
 #endif

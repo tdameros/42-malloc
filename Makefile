@@ -28,6 +28,7 @@ LIST_SRC		=	\
 					chunk.c				\
 					malloc.c			\
 					page.c				\
+					utils.c				\
 					zone.c
 
 

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   allocation.h                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tdameros <tdameros@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 15:37:00 by tdameros          #+#    #+#             */
-/*   Updated: 2025/08/08 15:37:00 by tdameros         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef ALLOCATION_H
 # define ALLOCATION_H
 
@@ -32,6 +20,5 @@ typedef struct allocations_s {
 } allocations_t;
 
 page_t *allocate_page(size_t aligned_size);
-
 
 #endif

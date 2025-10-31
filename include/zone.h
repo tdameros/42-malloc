@@ -25,4 +25,5 @@ zone_t **get_zone_from_chunk(const chunk_t *chunk, allocations_t *memory);
 zone_t **get_zone_from_size(size_t size, allocations_t *memory);
 zone_type_t get_zone_type(size_t size);
 size_t get_zone_full_size(size_t aligned_size_required);
+void print_zone(const zone_t *zone);
 #endif

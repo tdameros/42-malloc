@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tdameros <tdameros@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 16:49:00 by tdameros          #+#    #+#             */
-/*   Updated: 2025/08/07 16:49:00 by tdameros         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MALLOC_H
 # define MALLOC_H
 
@@ -26,5 +14,8 @@
 allocations_t malloc_memory;
 
 void *malloc(size_t size);
+void free(void *ptr);
+void *realloc(void *ptr, size_t size);
+void show_alloc_mem();
 
 #endif
