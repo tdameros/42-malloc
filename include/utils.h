@@ -8,6 +8,5 @@ void print_string(const char *str);
 void print_unumber(size_t number);
 void print_unumber_hexa(size_t number);
 void print_range_address(const void *address, size_t size);
-void print_identation(size_t level);
 
 #endif
