@@ -51,3 +51,11 @@ size_t get_zone_full_size(size_t aligned_size_required) {
             align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT));
   }
 }
+
+void print_zone(const zone_t *zone) {
+  const page_t *page = find_next_page_in_order(zone, NULL);
+  while (NULL != page) {
+    print_page(page);
+    page = find_next_page_in_order(zone, page);
+  }
+}

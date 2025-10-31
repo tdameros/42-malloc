@@ -2,6 +2,7 @@
 
 #include "allocation.h"
 #include "memory.h"
+#include "utils.h"
 
 allocations_t malloc_memory = {
     .tiny = NULL,
@@ -24,4 +25,13 @@ void *realloc(void *ptr, size_t size) {
   zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
   zone_t **destination_zone = get_zone_from_size(size, &malloc_memory);
   return realloc_memory_allocation(ptr, size, zone, destination_zone);
+}
+
+void show_alloc_mem() {
+  print_string("TINY ZONE:\n");
+  print_zone(malloc_memory.tiny);
+  print_string("SMALL ZONE:\n");
+  print_zone(malloc_memory.small);
+  print_string("LARGE ZONE:\n");
+  print_zone(malloc_memory.large);
 }

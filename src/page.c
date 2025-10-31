@@ -4,7 +4,8 @@
 #include <unistd.h>
 
 #include "allocation.h"
-#include "printf.h"
+#include "chunk.h"
+#include "utils.h"
 
 page_t *get_page_with_free_chunk(size_t required_chunk_size, zone_t *zone,
                                  chunk_t **free_chunk) {
@@ -70,4 +71,43 @@ page_t *allocate_page(size_t aligned_size) {
 
 int32_t free_page(page_t *page) {
   return munmap(page, page->size);
+}
+
+const page_t *find_next_page_in_order(const page_t *page_list,
+                                      const page_t *after) {
+  const page_t *current = page_list;
+  const page_t *next = NULL;
+
+  while (current != NULL) {
+    if ((after == NULL || current > after) &&
+        (next == NULL || current < next)) {
+      next = current;
+    }
+    current = current->next;
+  }
+  return next;
+}
+
+void print_page(const page_t *page) {
+  print_range_address(page, page->size);
+  print_string("  Allocation chunks:\n");
+  const chunk_t *chunk = find_next_chunk_in_order(page->allocation, NULL);
+  if (NULL == chunk) {
+    print_string("    None\n");
+  }
+  while (NULL != chunk) {
+    print_string("    ");
+    print_chunk(chunk);
+    chunk = find_next_chunk_in_order(page->allocation, chunk);
+  }
+  print_string("  Free chunks:\n");
+  chunk = find_next_chunk_in_order(page->free, NULL);
+  if (NULL == chunk) {
+    print_string("    None\n");
+  }
+  while (NULL != chunk) {
+    print_string("    ");
+    print_chunk(chunk);
+    chunk = find_next_chunk_in_order(page->free, chunk);
+  }
 }

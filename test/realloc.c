@@ -8,6 +8,8 @@
 #include "utest/utest.h"
 #include "zone.h"
 
+void show_alloc_mem();
+
 UTEST(realloc_memory_allocation, null_pointer_allocation) {
   allocations_t memory = {
       .tiny = NULL,

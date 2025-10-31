@@ -21,5 +21,4 @@ typedef struct allocations_s {
 
 page_t *allocate_page(size_t aligned_size);
 
-
 #endif

@@ -2,6 +2,7 @@
 
 #include "allocation.h"
 #include "page.h"
+#include "utils.h"
 
 chunk_t *get_chunk_with_size(size_t size, chunk_t *chunk) {
   while (NULL != chunk) {
@@ -67,4 +68,25 @@ chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk,
     *new_free_chunk = NULL;
     return free_chunk;
   }
+}
+
+chunk_t *find_next_chunk_in_order(chunk_t *chunk_list, const chunk_t *after) {
+  chunk_t *current = chunk_list;
+  chunk_t *next = NULL;
+
+  while (current != NULL) {
+    if ((after == NULL || current > after) &&
+        (next == NULL || current < next)) {
+      next = current;
+    }
+    current = current->header.next;
+  }
+
+  return next;
+}
+
+void print_chunk(const chunk_t *chunk) {
+  const void *chunk_data =
+      (void *)align_up_power_of_two((size_t)&chunk->data, ALIGNMENT);
+  print_range_address(chunk_data, chunk->header.size);
 }
