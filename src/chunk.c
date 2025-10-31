@@ -43,6 +43,8 @@ void remove_chunk(chunk_t **chunk_list, chunk_t *chunk_to_remove) {
     chunk_to_remove->header.next->header.previous =
         chunk_to_remove->header.previous;
   }
+  chunk_to_remove->header.next = NULL;
+  chunk_to_remove->header.previous = NULL;
 }
 
 chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk,
@@ -55,6 +57,8 @@ chunk_t *allocate_free_chunk(size_t size, chunk_t *free_chunk,
     new_free->header.size =
         free_chunk->header.size - size -
         align_up_power_of_two(sizeof(chunk_header_t), ALIGNMENT);
+    new_free->header.previous = NULL;
+    new_free->header.next = NULL;
     new_free->header.page = free_chunk->header.page;
     *new_free_chunk = new_free;
     free_chunk->header.size = size;

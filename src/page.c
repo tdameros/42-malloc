@@ -42,6 +42,8 @@ void remove_page(page_t **page, page_t *page_to_remove) {
   if (NULL != page_to_remove->next) {
     page_to_remove->next->previous = page_to_remove->previous;
   }
+  page_to_remove->next = NULL;
+  page_to_remove->previous = NULL;
 }
 
 page_t *allocate_page(size_t aligned_size) {
