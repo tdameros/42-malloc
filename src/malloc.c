@@ -35,3 +35,24 @@ void show_alloc_mem() {
   print_string("LARGE ZONE:\n");
   print_zone(malloc_memory.large);
 }
+
+void *calloc(size_t nmemb, size_t size) {
+  if (SIZE_MAX / size < nmemb) {
+    return NULL;
+  }
+  size_t total_bytes = nmemb * size;
+  void *ptr = malloc(total_bytes);
+  if (ptr == NULL) {
+    return (NULL);
+  }
+  ft_memset(ptr, 0, total_bytes);
+  return ptr;
+}
+
+void *reallocarray(void *ptr, size_t nmemb, size_t size) {
+  if (SIZE_MAX / size < nmemb) {
+    return NULL;
+  }
+  size_t total_bytes = nmemb * size;
+  return realloc(ptr, total_bytes);
+}
