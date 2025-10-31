@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <unistd.h>
 
 void print_char(char c) {
@@ -36,4 +37,19 @@ void print_range_address(const void *address, size_t size) {
   print_string(": ");
   print_unumber(size);
   print_string(" bytes\n");
+}
+
+void ft_memset(void *ptr, int value, size_t num) {
+  uint8_t *byte_ptr = ptr;
+  for (size_t i = 0; i < num; i++) {
+    byte_ptr[i] = value;
+  }
+}
+
+void ft_memcpy(void *dest, const void *src, size_t n) {
+  uint8_t *byte_dest = dest;
+  const uint8_t *byte_src = src;
+  for (size_t i = 0; i < n; i++) {
+    byte_dest[i] = byte_src[i];
+  }
 }
