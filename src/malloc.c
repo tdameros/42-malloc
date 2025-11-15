@@ -42,21 +42,23 @@ void *realloc(void *ptr, size_t size) {
   return new_ptr;
 }
 
-static void enter_wrapper(void) {
-  pthread_mutex_lock(&malloc_lock);
-}
-
-static void exit_wrapper(void) {
-  pthread_mutex_unlock(&malloc_lock);
-}
-
 void show_alloc_mem() {
+  enter_wrapper();
   print_string("TINY ZONE:\n");
   print_zone(malloc_memory.tiny);
   print_string("SMALL ZONE:\n");
   print_zone(malloc_memory.small);
   print_string("LARGE ZONE:\n");
   print_zone(malloc_memory.large);
+  exit_wrapper();
+}
+
+static void enter_wrapper(void) {
+  pthread_mutex_lock(&malloc_lock);
+}
+
+static void exit_wrapper(void) {
+  pthread_mutex_unlock(&malloc_lock);
 }
 
 void *calloc(size_t nmemb, size_t size) {
