@@ -2,6 +2,7 @@
 
 #include "chunk.h"
 #include "memory.h"
+#include "utils.h"
 
 void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone,
                                 zone_t **destination_zone) {
@@ -15,9 +16,7 @@ void *realloc_memory_allocation(void *ptr, size_t size, zone_t **zone,
   }
   if (NULL != chunk) {
     size_t copy_size = chunk->header.size < size ? chunk->header.size : size;
-    for (size_t i = 0; i < copy_size; i++) {
-      ((uint8_t *)new_allocation)[i] = ((uint8_t *)ptr)[i];
-    }
+    ft_memcpy(new_allocation, ptr, copy_size);
   }
   free_memory_allocation(ptr, zone);
   return new_allocation;
