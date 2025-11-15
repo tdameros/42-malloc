@@ -1,30 +1,53 @@
 #include "malloc.h"
 
+#include <pthread.h>
+
 #include "allocation.h"
 #include "memory.h"
 #include "utils.h"
 
-allocations_t malloc_memory = {
+static allocations_t malloc_memory = {
     .tiny = NULL,
     .small = NULL,
     .large = NULL,
 };
 
+static pthread_mutex_t malloc_lock = PTHREAD_MUTEX_INITIALIZER;
+
+static void enter_wrapper(void);
+static void exit_wrapper(void);
+
 void *malloc(size_t size) {
+  enter_wrapper();
   size_t aligned_size = align_up_power_of_two(size, ALIGNMENT);
   zone_t **zone = get_zone_from_size(aligned_size, &malloc_memory);
-  return allocate_memory_allocation(aligned_size, zone);
+  void *ptr = allocate_memory_allocation(aligned_size, zone);
+  exit_wrapper();
+  return ptr;
 }
 
 void free(void *ptr) {
+  enter_wrapper();
   zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
   free_memory_allocation(ptr, zone);
+  exit_wrapper();
 }
 
 void *realloc(void *ptr, size_t size) {
+  enter_wrapper();
   zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
   zone_t **destination_zone = get_zone_from_size(size, &malloc_memory);
-  return realloc_memory_allocation(ptr, size, zone, destination_zone);
+  void *new_ptr = realloc_memory_allocation(ptr, size, zone, destination_zone);
+  exit_wrapper();
+  return new_ptr;
+}
+
+static void enter_wrapper(void) {
+  pthread_mutex_lock(&malloc_lock);
+}
+
+static void exit_wrapper(void) {
+  pthread_mutex_unlock(&malloc_lock);
 }
 
 void show_alloc_mem() {
