@@ -5,6 +5,7 @@
 #include "utils.h"
 
 chunk_t *get_chunk_with_size(size_t size, chunk_t *chunk) {
+  print_string("search a chunk\n");
   while (NULL != chunk) {
     if (chunk->header.size >= size) {
       return chunk;

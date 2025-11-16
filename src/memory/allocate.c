@@ -9,6 +9,8 @@ static void *allocate_memory_allocation_medium(size_t aligned_size,
 static void *allocate_memory_allocation_large(size_t aligned_size,
                                               zone_t **zone);
 
+#include "utils.h"
+
 void *allocate_memory_allocation(size_t size, zone_t **zone) {
   size_t aligned_size = align_up_power_of_two(size, ALIGNMENT);
   if (get_zone_type(aligned_size) == LARGE_ZONE) {
@@ -18,20 +20,29 @@ void *allocate_memory_allocation(size_t size, zone_t **zone) {
   }
 }
 
+#include "printf/printf.h"
 static void *allocate_memory_allocation_medium(size_t aligned_size,
                                                zone_t **zone) {
+  print_string("START\n");
   if (aligned_size == 0) {
     return NULL;
   }
   chunk_t *free_chunk;
+  print_unumber_hexa((size_t) *zone);
+  print_string("\n");
   page_t *page = get_page_with_free_chunk(aligned_size, *zone, &free_chunk);
   if (NULL == page) {
     page = allocate_page(aligned_size);
+    print_string("Allocate new page: ");
+    print_unumber_hexa((size_t) page);
+    print_string("\n");
     if (NULL == page) {
       return NULL;
     }
     push_front_page(zone, page);
     free_chunk = page->free;
+  } else {
+    print_string("HERE\n");
   }
   remove_chunk(&page->free, free_chunk);
   chunk_t *new_free_chunk;

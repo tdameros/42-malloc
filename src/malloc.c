@@ -1,6 +1,8 @@
 #include "malloc.h"
 
 #include <pthread.h>
+#include <signal.h>
+#include <unistd.h>
 
 #include "allocation.h"
 #include "memory.h"
@@ -12,13 +14,34 @@ static allocations_t malloc_memory = {
     .large = NULL,
 };
 
-static pthread_mutex_t malloc_lock = PTHREAD_MUTEX_INITIALIZER;
+//static pthread_mutex_t malloc_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void enter_wrapper(void);
 static void exit_wrapper(void);
 
+#include <stdlib.h>
+
+void handler(int sig) {
+  (void) sig;
+  print_string("Segfault detected!\n");
+  show_alloc_mem();
+  print_string("Segfault end!\n");
+  _exit(1);            // quitter proprement (exit() est interdit ici)
+}
+
 void *malloc(size_t size) {
+  static size_t count = 0;
+
+  count++;
+  signal(SIGSEGV, handler);
+  print_string("Malloc ");
+  print_unumber(count);
+  print_string("\n");
   enter_wrapper();
+  if (count == 2100) {
+//    show_alloc_mem();
+//    exit(1);
+  }
   size_t aligned_size = align_up_power_of_two(size, ALIGNMENT);
   zone_t **zone = get_zone_from_size(aligned_size, &malloc_memory);
   void *ptr = allocate_memory_allocation(aligned_size, zone);
@@ -27,6 +50,7 @@ void *malloc(size_t size) {
 }
 
 void free(void *ptr) {
+  print_string("Free\n");
   enter_wrapper();
   zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
   free_memory_allocation(ptr, zone);
@@ -34,6 +58,7 @@ void free(void *ptr) {
 }
 
 void *realloc(void *ptr, size_t size) {
+  print_string("Realloc\n");
   enter_wrapper();
   zone_t **zone = get_zone_from_data(ptr, &malloc_memory);
   zone_t **destination_zone = get_zone_from_size(size, &malloc_memory);
@@ -43,25 +68,28 @@ void *realloc(void *ptr, size_t size) {
 }
 
 void show_alloc_mem() {
-  enter_wrapper();
+//  enter_wrapper();
   print_string("TINY ZONE:\n");
   print_zone(malloc_memory.tiny);
   print_string("SMALL ZONE:\n");
   print_zone(malloc_memory.small);
   print_string("LARGE ZONE:\n");
   print_zone(malloc_memory.large);
-  exit_wrapper();
+//  exit_wrapper();
 }
 
 static void enter_wrapper(void) {
-  pthread_mutex_lock(&malloc_lock);
+//  pthread_mutex_lock(&malloc_lock);
+//  show_alloc_mem();
+//  print_string("end\n");
 }
 
 static void exit_wrapper(void) {
-  pthread_mutex_unlock(&malloc_lock);
+//  pthread_mutex_unlock(&malloc_lock);
 }
 
 void *calloc(size_t nmemb, size_t size) {
+  print_string("Calloc\n");
   if (size == 0 || SIZE_MAX / size < nmemb) {
     return NULL;
   }
@@ -75,6 +103,7 @@ void *calloc(size_t nmemb, size_t size) {
 }
 
 void *reallocarray(void *ptr, size_t nmemb, size_t size) {
+  print_string("Reallocarray\n");
   if (size == 0 || SIZE_MAX / size < nmemb) {
     return NULL;
   }

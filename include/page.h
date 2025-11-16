@@ -12,6 +12,7 @@ typedef struct page_s {
   struct page_s *previous;
   struct page_s *next;
   size_t size;
+  zone_type_t zone_type;
 } page_t;
 
 page_t *get_page_with_free_chunk(size_t required_chunk_size, zone_t *zone, chunk_t **free_chunk);
