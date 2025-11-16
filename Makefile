@@ -16,8 +16,9 @@ else
     OS := UNKNOWN
 endif
 
-NAME			=	libft_malloc_$(HOSTTYPE).so
-TEST_NAME		=	tests_bin
+NAME				=	libft_malloc_$(HOSTTYPE).so
+TEST_NAME			=	tests_bin
+SYMBOLIC_LINK_NAME	=	libft_malloc.so
 
 # --------------- FILES --------------- #
 
@@ -65,10 +66,11 @@ TEST_OBJ		=	$(patsubst %.c, $(DIR_BUILD)%.o, $(TEST_SRC) $(TEST_MALLOC_SRC) $(LI
 
 # ------------ COMPILATION ------------ #
 
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CFLAGS			=	-Wall -Wextra -Werror
 
 ifeq ($(TEST_MODE),1)
     CFLAGS += -DTEST_MODE
+    CFLAGS += -g3
 endif
 
 DEP_FLAGS		=	-MMD -MP
@@ -117,6 +119,7 @@ $(TEST_NAME):	$(TEST_OBJ)
 
 $(NAME):		$(OBJ)
 				$(CC) -shared $(OBJ) -o $(NAME)
+				ln -sf $(NAME) $(SYMBOLIC_LINK_NAME)
 
 # ---------- COMPILED RULES ----------- #
 
@@ -143,6 +146,7 @@ fclean: clean
 				$(RM) libft_malloc.so
 				$(RM) $(NAME)
 				$(RM) $(TEST_NAME)
+				$(RM) $(SYMBOLIC_LINK_NAME)
 
 .PHONY: re
 re:				fclean
