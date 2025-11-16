@@ -11,7 +11,19 @@ zone_t **get_zone_from_chunk(const chunk_t *chunk, allocations_t *memory) {
   if (chunk == NULL) {
     return NULL;
   }
-  return get_zone_from_size(chunk->header.page->size, memory);
+  return get_zone_from_type(chunk->header.page->zone_type, memory);
+}
+
+zone_t **get_zone_from_type(zone_type_t zone_type, allocations_t *memory) {
+  switch (zone_type) {
+    case TINY_ZONE:
+      return &memory->tiny;
+    case SMALL_ZONE:
+      return &memory->small;
+    case LARGE_ZONE:
+      return &memory->large;
+  }
+  return &memory->large;
 }
 
 zone_t **get_zone_from_size(size_t size, allocations_t *memory) {

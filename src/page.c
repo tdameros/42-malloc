@@ -66,6 +66,7 @@ page_t *allocate_page(size_t aligned_size) {
   new_chunk->header.page = new_page;
   new_page->free = new_chunk;
   new_page->size = total_size;
+  new_page->zone_type = get_zone_type(aligned_size);
   return new_page;
 }
 
