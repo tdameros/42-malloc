@@ -66,10 +66,11 @@ TEST_OBJ		=	$(patsubst %.c, $(DIR_BUILD)%.o, $(TEST_SRC) $(TEST_MALLOC_SRC) $(LI
 
 # ------------ COMPILATION ------------ #
 
-CFLAGS			=	-Wall -Wextra -Werror -g3
+CFLAGS			=	-Wall -Wextra -Werror
 
 ifeq ($(TEST_MODE),1)
     CFLAGS += -DTEST_MODE
+    CFLAGS += -g3
 endif
 
 DEP_FLAGS		=	-MMD -MP
