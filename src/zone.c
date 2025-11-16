@@ -23,7 +23,7 @@ zone_t **get_zone_from_type(zone_type_t zone_type, allocations_t *memory) {
     case LARGE_ZONE:
       return &memory->large;
   }
-  return &memory->large;
+  return NULL;
 }
 
 zone_t **get_zone_from_size(size_t size, allocations_t *memory) {
