@@ -2,6 +2,8 @@
 
 A custom implementation of the `malloc`, `free`, `realloc`, `calloc` and `reallocarray` memory allocation functions, built as part of the 42 school curriculum. This project implements a zone-based memory allocator using `mmap` for efficient memory management.
 
+![malloc architecture](./doc/malloc_architecture.png)
+
 ## Features
 
 - **Zone-based allocation**: Three types of zones for optimized memory management:
